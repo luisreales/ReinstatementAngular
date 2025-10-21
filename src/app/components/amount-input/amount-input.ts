@@ -1,0 +1,27 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-amount-input',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  template: `
+    <label class="block text-sm font-medium text-slate-700 mb-1">{{ label }}</label>
+    <div class="relative">
+      <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 text-lg font-semibold">$</span>
+      <input type="number" step="0.01" min="0" placeholder="0.00"
+             class="w-full rounded-md border border-slate-300 pl-10 pr-3 py-2
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
+             [class.opacity-50]="formCtrl.disabled"
+             [formControl]="formCtrl">
+    </div>
+    <p *ngIf="formCtrl.invalid && formCtrl.touched" class="text-red-600 text-xs mt-1">
+      Amount must be ≥ 0
+    </p>
+  `
+})
+export class AmountInputComponent {
+  @Input({ required: true }) formCtrl!: FormControl<number>;
+  @Input() label = 'Amount';
+}
