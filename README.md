@@ -2,6 +2,7 @@
 
 Angular 20 + Tailwind CSS single‑page app used to calculate and display reinstatement totals. The UI has three areas: a left form (inputs + toggle), an account information card, and a submit button card.
 
+![alt text](image.png)
 ## Prerequisites
 - Node.js 18+ (20 LTS recommended)
 - npm 9+ (or pnpm/yarn if you prefer)
