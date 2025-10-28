@@ -1,0 +1,118 @@
+<div class="min-h-screen bg-slate-100 p-4 md:p-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 xl:gap-8 items-start">
+
+        <!-- Card 1: Form -->
+        <section class="lg:col-span-7 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 h-full">
+            <!-- Header -->
+            <header class="bg-indigo-900 p-4">
+                <h2 class="text-xl font-semibold text-white">Reinstatement Guide</h2>
+            </header>
+
+            <!-- Form Content -->
+            <div class="p-6 md:pl-10">
+                <!-- Two-column form layout -->
+                <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <!-- Left Column -->
+                    <div class="space-y-4">
+                        <!-- Row 1: Past Due Today -->
+                        <app-amount-input label="Past Due Today"
+                            [formCtrl]="form.controls.pastDueToday"></app-amount-input>
+
+                        <!-- Row 2: NSF Fees + Late Fees (side-by-side inside left column) -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <app-amount-input label="NSF Fees" [formCtrl]="form.controls.nsfFees"></app-amount-input>
+                            <app-amount-input label="Late Fees" [formCtrl]="form.controls.lateFees"></app-amount-input>
+                        </div>
+
+                        <!-- Row 3: Sales Taxes -->
+                        <app-amount-input label="Sales Taxes" [formCtrl]="form.controls.salesTaxes"></app-amount-input>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-4">
+                        <!-- Row 1: Repossession Fees -->
+                        <app-amount-input label="Repossession Fees"
+                            [formCtrl]="form.controls.repossessionFees"></app-amount-input>
+
+                        <!-- Row 2: Key Fees -->
+                        <app-amount-input label="Key Fees" [formCtrl]="form.controls.keyFees"></app-amount-input>
+
+                        <!-- Row 3: Additional Fees + Switch aligned to right -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+                            <app-amount-input label="Additional Fees"
+                                [formCtrl]="form.controls.additionalFees"></app-amount-input>
+                            <!-- Label above, switch below (stacked) -->
+                            <div class="flex flex-col gap-2">
+                                <span class="text-sm font-medium text-slate-600">Include Additional Fees</span>
+                                <!-- Switch control styled per requested snippet -->
+                                <label class="inline-flex items-center cursor-pointer select-none w-fit">
+                                    <input type="checkbox" aria-label="Include Additional Fees" class="sr-only peer"
+                                        [formControl]="form.controls.includeAdditionalFees">
+                                    <div
+                                        class="relative w-11 h-6 bg-gray-200 rounded-full dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 dark:peer-focus:ring-indigo-800 peer-checked:bg-indigo-900 dark:peer-checked:bg-indigo-900 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white">
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- Card 2: Tabs + Totals -->
+        <section class="lg:col-span-4 bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 h-full">
+            <!-- Header -->
+            <header class="bg-indigo-900 p-4">
+                <h2 class="text-xl font-semibold text-white">Account Information</h2>
+            </header>
+
+            <!-- Content -->
+            <div class="p-6">
+                <!-- Centered pill tabs -->
+                <div class="flex justify-center mb-6">
+                    <div class="inline-flex rounded-full bg-slate-100 p-1 shadow-inner">
+                        <button (click)="activeTab.set('loan')" class="px-4 py-1.5 text-sm rounded-full transition-all"
+                            [class.bg-white]="activeTab()==='loan'" [class.text-slate-900]="activeTab()==='loan'"
+                            [class.shadow]="activeTab()==='loan'" [class.text-slate-500]="activeTab()!=='loan'">
+                            Loan
+                        </button>
+                        <button (click)="activeTab.set('customer')"
+                            class="px-4 py-1.5 text-sm rounded-full transition-all"
+                            [class.bg-white]="activeTab()==='customer'"
+                            [class.text-slate-900]="activeTab()==='customer'" [class.shadow]="activeTab()==='customer'"
+                            [class.text-slate-500]="activeTab()!=='customer'">
+                            Customer
+                        </button>
+                    </div>
+                </div>
+
+                <ng-container *ngIf="activeTab()==='loan'; else customer">
+                    <app-account-info [totalDue]="totalDue()" [pastDue]="pastDue()" [totalFees]="totalFees()"
+                        [paymentAmount]="paymentAmount" [frequency]="frequency">
+                    </app-account-info>
+                </ng-container>
+
+                <ng-template #customer>
+                    <div class="text-sm text-slate-600">
+                        Customer info placeholder.
+                    </div>
+                </ng-template>
+            </div>
+        </section>
+
+        <!-- Card 3: Submit -->
+        <aside class="lg:col-span-1 w-full">
+            <div class="sticky top-4 flex flex-col">
+                <button (click)="submit()" class="w-full py-2 bg-indigo-900 text-white shadow-md hover:bg-indigo-800">
+                    Submit
+                </button>
+                <div *ngIf="showSuccess()" class="mt-2 rounded-md bg-green-100 text-green-800 px-3 py-2 text-sm">
+                    Success
+                </div>
+            </div>
+        </aside>
+
+    </div>
+</div>
